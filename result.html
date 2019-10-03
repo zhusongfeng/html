@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>结果</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="js/rem.js"></script>
+    <style>
+        body{
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+        }
+       /* .inspection-result{
+            !*width: 100%;*!
+            height: 12rem;
+            padding: 0.2rem 0.1rem;
+            background-color: #EFEDED;
+        }*/
+        .result-container{
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+        }
+        .result-list{
+            width: 100%;
+            /*height: 0.8rem;*/
+            line-height: 0.6rem;
+        }
+        .result-list-first{
+            width: 100%;
+            padding-top: 0.2rem;
+            height: 0.8rem;
+            line-height: 0.8rem;
+        }
+        .result-list-name,.result-list-names{
+            display: block;
+            /*width: 100%;*/
+            /*height: 0.6rem;*/
+            line-height: 0.6rem;
+            text-align: left;
+            color: #333;
+            font-size: 0.3rem;
+            padding: 0 0.4rem;
+            text-indent: 0.58rem;
+        }
+        .result-list-names{
+            text-indent: 0.2rem;
+            height: 0.8rem;
+            line-height: 0.8rem;
+            padding: 0 0.2rem;
+        }
+    </style>
+
+</head>
+<body>
+
+<div  class="inspection-result"  id="app" v-clock >
+    <ul class="result-container">
+        <li class="result-list-first">
+            <span class="result-list-names">结果：</span>
+        </li>
+        <li class="result-list" v-for="(item,index) in resultArr" :key="index">
+            <span class="result-list-name">{{index+1}}：{{item}}；</span>
+
+        </li>
+
+    </ul>
+
+</div>
+
+
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+
+            resultArr:[],//
+        },
+
+        mounted() {
+            //初始化数据
+            this.init();
+
+
+        },
+        methods:{
+            init: function () {
+                let self = this;
+                self.resultArr = [];
+                let resultData = localStorage.getItem('examinationResult').replace(/\"/g, "");
+
+                resultData.split('-').forEach(item=>{
+                    self.resultArr.push(item)
+                });
+            },
+
+
+        },
+
+    });
+
+</script>
+</html>

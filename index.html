@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>配方检查系统</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="js/rem.js"></script>
+
+</head>
+<body>
+
+<div  class="inspection-system"  id="app" v-clock >
+    <div style="display:none" >{{exitsVal}}</div>
+    <ul class="system-container">
+        <li class="system-list">
+            <span class="system-list-name">色斑：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"
+                       v-model='seban' placeholder="请输入色斑参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">毛孔：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"
+                       v-model='maokong'  placeholder="请输入毛孔参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">粗燥度：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"
+                       v-model='cuzaodu'  placeholder="请输入粗燥度参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">皱纹：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"  v-model='zhouwen' placeholder="请输入皱纹参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">粉刺：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"   v-model='fenci'   placeholder="请输入粉刺参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">色素：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"   v-model='sesu'   placeholder="请输入色素参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">水份：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"  v-model='shuifen'   placeholder="请输入水份参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+        <li class="system-list">
+            <span class="system-list-name">敏感度：</span>
+            <span class="system-list-input">
+                <input type="text" class="system-list-item"  v-model='mingandu'   placeholder="请输入敏感度参数"  placeholder-style="color:#999;">
+            </span>
+        </li>
+
+
+        <li class="system-last-btn">
+            <span class="system-formula article"  v-show="showBtn"  @click="submitButton"> 生成配方 </span>
+            <span class="system-formula"  v-show="!showBtn" > 生成配方 </span>
+        </li>
+
+    </ul>
+
+</div>
+
+
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            showBtn:false,//控制按钮是否点击
+            seban:'',
+            maokong:'',
+            cuzaodu:'',
+            zhouwen:'',
+            fenci:'',
+            sesu:'',
+            shuifen:'',
+            mingandu:'',
+            ifExist:0,
+
+        },
+        computed:{
+            exitsVal:function(){
+                this.ifExist=Number(Boolean(this.seban))+Number(Boolean(this.maokong))+Number(Boolean(this.cuzaodu))+Number(Boolean(this.zhouwen))+Number(Boolean(this.fenci))+Number(Boolean(this.sesu))+Number(Boolean(this.shuifen))+Number(Boolean(this.mingandu));
+                return this.ifExist;
+            }
+        },
+        watch:{
+            ifExist(newVal){
+                if(Number(newVal) == 8){
+                    this.showBtn = true;
+                }else{
+                    this.showBtn = false;
+                }
+            }
+        },
+
+        methods:{
+
+            submitButton(){
+                let self = this;
+                let info = '';
+                localStorage.setItem('examinationResult', JSON.stringify(info));
+
+                $.get(`http://test.qclike.cn/?seban=${self.seban}&maokong=${self.maokong}&cuzaodu=${self.cuzaodu}&zhouwen=${self.zhouwen}&fenci=${self.fenci}&sesu=${self.sesu}&shuifen=${self.shuifen}&mingandu=${self.mingandu}`,
+                    function (res) {
+                        let  result = JSON.parse(res);
+
+                        console.log(111111111,result.code);
+                        console.log(111111111,result.data);
+                        if(result.code == 200){
+
+                            info = result.data;
+                            localStorage.setItem('examinationResult', JSON.stringify(info));
+                            window.location.href  = 'result.html'
+
+
+                        }else {
+
+                        }
+                });
+            }
+
+
+        }
+    });
+
+</script>
+</html>
